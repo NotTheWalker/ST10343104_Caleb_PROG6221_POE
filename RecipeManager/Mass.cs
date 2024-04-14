@@ -9,7 +9,7 @@ public class Mass
     }
 
     private double Milligrams { get; set; } // Always stored in milligrams
-    private UnitMass Unit { get; set; }
+    private UnitMass Unit { get; set; } // The current unit of measurement
 
     public Mass(double milligrams, UnitMass unit)
     {
@@ -39,22 +39,27 @@ public class Mass
     {
         if(Milligrams > 453592)
         {
+            Unit = UnitMass.Pound;
             return ConvertTo(UnitMass.Pound);
         }
         else if(Milligrams > 1000000)
         {
+            Unit = UnitMass.Kilogram;
             return ConvertTo(UnitMass.Kilogram);
         }
         else if(Milligrams > 28349.5)
         {
+            Unit = UnitMass.Ounce;
             return ConvertTo(UnitMass.Ounce);
         }
         else if(Milligrams > 1000)
         {
+            Unit = UnitMass.Gram;
             return ConvertTo(UnitMass.Gram);
         }
         else
         {
+            Unit = UnitMass.Milligram;
             return Milligrams;
         }
     }

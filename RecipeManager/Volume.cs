@@ -9,7 +9,7 @@ public class Volume
     }
 
     private double Milliliters { get; set; } // Always stored in milliliters
-    private UnitVolume Unit { get; set; }
+    private UnitVolume Unit { get; set; } // The current unit of measurement
 
     public Volume(double milliliters, UnitVolume unit)
     {
@@ -42,35 +42,43 @@ public class Volume
     {
         if(Milliliters > 3785.41)
         {
+            Unit = UnitVolume.Gallon;
             return ConvertTo(UnitVolume.Gallon);
         }
         else if(Milliliters > 1000)
         {
+            Unit = UnitVolume.Liter;
             return ConvertTo(UnitVolume.Liter);
         }
         else if(Milliliters > 946.353)
         {
+            Unit = UnitVolume.Quart;
             return ConvertTo(UnitVolume.Quart);
         }
         else if(Milliliters > 473.176)
         {
+            Unit = UnitVolume.Pint;
             return ConvertTo(UnitVolume.Pint);
         }
         else if(Milliliters > 236.588)
         {
+            Unit = UnitVolume.Cup;
             return ConvertTo(UnitVolume.Cup);
         }
         else if(Milliliters > 14.7868)
         {
+            Unit = UnitVolume.Tablespoon;
             return ConvertTo(UnitVolume.Tablespoon);
         }
         else if(Milliliters > 4.92892)
         {
+            Unit = UnitVolume.Teaspoon;
             return ConvertTo(UnitVolume.Teaspoon);
         }
         else
         {
-            return ConvertTo(UnitVolume.Milliliter);
+            Unit = UnitVolume.Milliliter;
+            return Milliliters;
         }
     }
 }
