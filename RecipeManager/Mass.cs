@@ -1,6 +1,6 @@
 ﻿namespace RecipeManager;
 
-public class Mass
+public class Mass : AbstractMeasurable
 {
     public enum UnitMass
     {
@@ -8,59 +8,53 @@ public class Mass
         Milligram, Gram, Ounce, Pound, Kilogram
     }
 
-    private double Milligrams { get; set; } // Always stored in milligrams
-    private UnitMass Unit { get; set; } // The current unit of measurement
-
     public Mass(double milligrams, UnitMass unit)
     {
-        Milligrams = milligrams;
-        Unit = unit;
+        BaseValue = milligrams;
+        CurrentUnit = unit;
     }
 
-    public double ToMilligrams()
-    {
-        return Milligrams;
-    }
-
-    public double ConvertTo(UnitMass unit)
+    public override double ConvertTo(Enum unit)
     {
         return unit switch
         {
-            UnitMass.Milligram => Milligrams,
-            UnitMass.Gram => Milligrams / 1000,
-            UnitMass.Ounce => Milligrams / 28349.5,
-            UnitMass.Pound => Milligrams / 453592,
-            UnitMass.Kilogram => Milligrams / 1000000,
+            UnitMass.Milligram => BaseValue,
+            UnitMass.Gram => BaseValue / 1000,
+            UnitMass.Ounce => BaseValue / 28349.5,
+            UnitMass.Pound => BaseValue / 453592,
+            UnitMass.Kilogram => BaseValue / 1000000,
             _ => throw new ArgumentException("Invalid unit")
         };
     }
 
     public double ConvertToLargest()
     {
-        if(Milligrams > 453592)
+        // The order of the if statements is based on the size of the units
+        // The unit used is stored in CurrentUnit
+        if(BaseValue > 453592)
         {
-            Unit = UnitMass.Pound;
+            CurrentUnit = UnitMass.Pound;
             return ConvertTo(UnitMass.Pound);
         }
-        else if(Milligrams > 1000000)
+        else if(BaseValue > 1000000)
         {
-            Unit = UnitMass.Kilogram;
+            CurrentUnit = UnitMass.Kilogram;
             return ConvertTo(UnitMass.Kilogram);
         }
-        else if(Milligrams > 28349.5)
+        else if(BaseValue > 28349.5)
         {
-            Unit = UnitMass.Ounce;
+            CurrentUnit = UnitMass.Ounce;
             return ConvertTo(UnitMass.Ounce);
         }
-        else if(Milligrams > 1000)
+        else if(BaseValue > 1000)
         {
-            Unit = UnitMass.Gram;
+            CurrentUnit = UnitMass.Gram;
             return ConvertTo(UnitMass.Gram);
         }
         else
         {
-            Unit = UnitMass.Milligram;
-            return Milligrams;
+            CurrentUnit = UnitMass.Milligram;
+            return BaseValue;
         }
     }
 }
