@@ -83,34 +83,17 @@ public class Volume : AbstractMeasurable
 
     public override void ConvertFrom(Enum unit)
     {
-        switch (unit)
+        BaseValue *= unit switch
         {
-            case UnitVolume.Milliliter:
-                BaseValue *= 1;
-                break;
-            case UnitVolume.Teaspoon:
-                BaseValue *= 4.92892;
-                break;
-            case UnitVolume.Tablespoon:
-                BaseValue *= 14.7868;
-                break;
-            case UnitVolume.Cup:
-                BaseValue *= 236.588;
-                break;
-            case UnitVolume.Pint:
-                BaseValue *= 473.176;
-                break;
-            case UnitVolume.Quart:
-                BaseValue *= 946.353;
-                break;
-            case UnitVolume.Liter:
-                BaseValue *= 1000;
-                break;
-            case UnitVolume.Gallon:
-                BaseValue *= 3785.41;
-                break;
-            default:
-                throw new ArgumentException("Invalid unit");
-        }
+            UnitVolume.Milliliter => 1,
+            UnitVolume.Teaspoon => 4.92892,
+            UnitVolume.Tablespoon => 14.7868,
+            UnitVolume.Cup => 236.588,
+            UnitVolume.Pint => 473.176,
+            UnitVolume.Quart => 946.353,
+            UnitVolume.Liter => 1000,
+            UnitVolume.Gallon => 3785.41,
+            _ => throw new ArgumentException("Invalid unit"),
+        };
     }
 }

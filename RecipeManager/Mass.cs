@@ -65,25 +65,14 @@ public class Mass : AbstractMeasurable
 
     public override void ConvertFrom(Enum unit)
     {
-        switch (unit)
+        BaseValue *= unit switch
         {
-            case UnitMass.Milligram:
-                BaseValue *= 1;
-                break;
-            case UnitMass.Gram:
-                BaseValue *= 1000;
-                break;
-            case UnitMass.Ounce:
-                BaseValue *= 28349.5;
-                break;
-            case UnitMass.Pound:
-                BaseValue *= 453592;
-                break;
-            case UnitMass.Kilogram:
-                BaseValue *= 1000000;
-                break;
-            default:
-                throw new ArgumentException("Invalid unit");
-        }
+            UnitMass.Milligram => 1,
+            UnitMass.Gram => 1000,
+            UnitMass.Ounce => 28349.5,
+            UnitMass.Pound => 453592,
+            UnitMass.Kilogram => 1000000,
+            _ => throw new ArgumentException("Invalid unit"),
+        };
     }
 }
