@@ -2,32 +2,24 @@
 
 public class Recipe
 {
-    private int IngredientCount { get; set; } // The number of ingredients in the recipe
-    private List<Ingredient> Ingredients { get; set; } // The ingredient names and amounts
-    private int StepCount { get; set; } // The number of steps in the recipe
-    private List<string> Steps { get; set; } // The description of each step
+    private Dictionary<string, AbstractMeasurable> Ingredients { get; set; }
+    private string[] Steps { get; set; }
 
-    private enum ScaleFactor
+
+    public Recipe(Dictionary<string, AbstractMeasurable> ingredients, string[] steps)
     {
-        Half, Original, Double, Triple
+        Ingredients = ingredients;
+        Steps = steps;
     }
-    private ScaleFactor Scale { get; set; } // The scale factor for the recipe
 
     public Recipe()
     {
-        Ingredients = new List<Ingredient>();
-        Steps = new List<string>();
+        Ingredients = new Dictionary<string, AbstractMeasurable>();
+        Steps = new string[0];
     }
 
-    public void AddIngredient(Ingredient ingredient)
+    public void AddIngredient(string name, AbstractMeasurable amount)
     {
-        Ingredients.Add(ingredient);
-        IngredientCount++;
-    }
-
-    public void AddStep(string step)
-    {
-        Steps.Add(step);
-        StepCount++;
+        Ingredients.Add(name, amount);
     }
 }
