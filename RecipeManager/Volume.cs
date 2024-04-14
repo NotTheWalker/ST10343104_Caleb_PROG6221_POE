@@ -30,41 +30,41 @@ public class Volume : AbstractMeasurable
         };
     }
 
-    public override double ConvertToLargest()
+    public override double ConvertToLargest(double Value)
     {
         // The order of the if statements is based on the size of the units
         // The unit used is stored in CurrentUnit
-        if(BaseValue > 3785.41)
+        if(Value > 3785.41)
         {
             CurrentUnit = UnitVolume.Gallon;
             return ConvertTo(UnitVolume.Gallon);
         }
-        else if(BaseValue > 1000)
+        else if(Value > 1000)
         {
             CurrentUnit = UnitVolume.Liter;
             return ConvertTo(UnitVolume.Liter);
         }
-        else if(BaseValue > 946.353)
+        else if(Value > 946.353)
         {
             CurrentUnit = UnitVolume.Quart;
             return ConvertTo(UnitVolume.Quart);
         }
-        else if(BaseValue > 473.176)
+        else if(Value > 473.176)
         {
             CurrentUnit = UnitVolume.Pint;
             return ConvertTo(UnitVolume.Pint);
         }
-        else if(BaseValue > 236.588)
+        else if(Value > 236.588)
         {
             CurrentUnit = UnitVolume.Cup;
             return ConvertTo(UnitVolume.Cup);
         }
-        else if(BaseValue > 14.7868)
+        else if(Value > 14.7868)
         {
             CurrentUnit = UnitVolume.Tablespoon;
             return ConvertTo(UnitVolume.Tablespoon);
         }
-        else if(BaseValue > 4.92892)
+        else if(Value > 4.92892)
         {
             CurrentUnit = UnitVolume.Teaspoon;
             return ConvertTo(UnitVolume.Teaspoon);
@@ -72,7 +72,45 @@ public class Volume : AbstractMeasurable
         else
         {
             CurrentUnit = UnitVolume.Milliliter;
-            return BaseValue;
+            return Value;
+        }
+    }
+
+    public override double ConvertToLargest()
+    {
+        return ConvertToLargest(BaseValue);
+    }
+
+    public override void ConvertFrom(Enum unit)
+    {
+        switch (unit)
+        {
+            case UnitVolume.Milliliter:
+                BaseValue *= 1;
+                break;
+            case UnitVolume.Teaspoon:
+                BaseValue *= 4.92892;
+                break;
+            case UnitVolume.Tablespoon:
+                BaseValue *= 14.7868;
+                break;
+            case UnitVolume.Cup:
+                BaseValue *= 236.588;
+                break;
+            case UnitVolume.Pint:
+                BaseValue *= 473.176;
+                break;
+            case UnitVolume.Quart:
+                BaseValue *= 946.353;
+                break;
+            case UnitVolume.Liter:
+                BaseValue *= 1000;
+                break;
+            case UnitVolume.Gallon:
+                BaseValue *= 3785.41;
+                break;
+            default:
+                throw new ArgumentException("Invalid unit");
         }
     }
 }

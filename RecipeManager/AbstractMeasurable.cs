@@ -2,15 +2,26 @@
 
 public abstract class AbstractMeasurable
 {
-    private double BaseValue { get; set; }
-    private Enum CurrentUnit { get; set; }
+    protected double BaseValue { get; set; }
+    protected Enum? CurrentUnit { get; set; }
 
-    public abstract AbstractMeasurable(double baseValue, Enum unit)
+    public double GetBaseValue()
     {
-        BaseValue = baseValue; // The value of the unit in the base unit
-        CurrentUnit = unit; // The current unit of the value
+        return BaseValue;
+    }
+
+    public void SetBaseValue(double value)
+    {
+        BaseValue = value;
+    }
+
+    public Enum? GetCurrentUnit()
+    {
+        return CurrentUnit;
     }
 
     public abstract double ConvertTo(Enum unit);
+    public abstract void ConvertFrom(Enum unit);
+    public abstract double ConvertToLargest(double Value);
     public abstract double ConvertToLargest();
 }
