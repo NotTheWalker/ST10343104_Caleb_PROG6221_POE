@@ -34,37 +34,37 @@ public class Volume : AbstractMeasurable
     {
         // The order of the if statements is based on the size of the units
         // The unit used is stored in CurrentUnit
-        if(Value > 3785.41)
+        if(Value >= 3785.41)
         {
             CurrentUnit = UnitVolume.Gallon;
             return ConvertTo(UnitVolume.Gallon);
         }
-        else if(Value > 1000)
+        else if(Value >= 1000)
         {
             CurrentUnit = UnitVolume.Liter;
             return ConvertTo(UnitVolume.Liter);
         }
-        else if(Value > 946.353)
+        else if(Value >= 946.353)
         {
             CurrentUnit = UnitVolume.Quart;
             return ConvertTo(UnitVolume.Quart);
         }
-        else if(Value > 473.176)
+        else if(Value >= 473.176)
         {
             CurrentUnit = UnitVolume.Pint;
             return ConvertTo(UnitVolume.Pint);
         }
-        else if(Value > 236.588)
+        else if(Value >= 236.588)
         {
             CurrentUnit = UnitVolume.Cup;
             return ConvertTo(UnitVolume.Cup);
         }
-        else if(Value > 14.7868)
+        else if(Value >= 14.7868)
         {
             CurrentUnit = UnitVolume.Tablespoon;
             return ConvertTo(UnitVolume.Tablespoon);
         }
-        else if(Value > 4.92892)
+        else if(Value >= 4.92892)
         {
             CurrentUnit = UnitVolume.Teaspoon;
             return ConvertTo(UnitVolume.Teaspoon);
