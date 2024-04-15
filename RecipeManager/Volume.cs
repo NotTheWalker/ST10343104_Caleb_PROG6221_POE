@@ -2,6 +2,14 @@
 
 public class Volume : AbstractMeasurable
 {
+    private const double TEASPOON = 4.92892;
+    private const double TABLESPOON = 14.7868;
+    private const double CUP = 236.588;
+    private const double PINT = 473.176;
+    private const double QUART = 946.353;
+    private const double LITER = 1000;
+    private const double GALLON = 3785.41;
+
     public enum UnitVolume
     {
         // Units arranged in ascending order for comparison purposes
@@ -14,86 +22,64 @@ public class Volume : AbstractMeasurable
         CurrentUnit = unit;
     }
 
-    public override double ConvertTo(Enum unit)
+    public override double ConvertTo(Enum unit) => unit switch
     {
-        return unit switch
-        {
-            UnitVolume.Milliliter => BaseValue,
-            UnitVolume.Teaspoon => BaseValue / 4.92892,
-            UnitVolume.Tablespoon => BaseValue / 14.7868,
-            UnitVolume.Cup => BaseValue / 236.588,
-            UnitVolume.Pint => BaseValue / 473.176,
-            UnitVolume.Quart => BaseValue / 946.353,
-            UnitVolume.Liter => BaseValue / 1000,
-            UnitVolume.Gallon => BaseValue / 3785.41,
-            _ => throw new ArgumentException("Invalid unit")
-        };
-    }
+        UnitVolume.Milliliter => BaseValue,
+        UnitVolume.Teaspoon => BaseValue / TEASPOON,
+        UnitVolume.Tablespoon => BaseValue / TABLESPOON,
+        UnitVolume.Cup => BaseValue / CUP,
+        UnitVolume.Pint => BaseValue / PINT,
+        UnitVolume.Quart => BaseValue / QUART,
+        UnitVolume.Liter => BaseValue / LITER,
+        UnitVolume.Gallon => BaseValue / GALLON,
+        _ => throw new ArgumentException("Invalid unit")
+    };
 
     public override double ConvertToLargest(double Value)
     {
         // The order of the if statements is based on the size of the units
         // The unit used is stored in CurrentUnit
-        if(Value >= 3785.41)
+        switch (Value)
         {
-            CurrentUnit = UnitVolume.Gallon;
-            return ConvertTo(UnitVolume.Gallon);
-        }
-        else if(Value >= 1000)
-        {
-            CurrentUnit = UnitVolume.Liter;
-            return ConvertTo(UnitVolume.Liter);
-        }
-        else if(Value >= 946.353)
-        {
-            CurrentUnit = UnitVolume.Quart;
-            return ConvertTo(UnitVolume.Quart);
-        }
-        else if(Value >= 473.176)
-        {
-            CurrentUnit = UnitVolume.Pint;
-            return ConvertTo(UnitVolume.Pint);
-        }
-        else if(Value >= 236.588)
-        {
-            CurrentUnit = UnitVolume.Cup;
-            return ConvertTo(UnitVolume.Cup);
-        }
-        else if(Value >= 14.7868)
-        {
-            CurrentUnit = UnitVolume.Tablespoon;
-            return ConvertTo(UnitVolume.Tablespoon);
-        }
-        else if(Value >= 4.92892)
-        {
-            CurrentUnit = UnitVolume.Teaspoon;
-            return ConvertTo(UnitVolume.Teaspoon);
-        }
-        else
-        {
-            CurrentUnit = UnitVolume.Milliliter;
-            return Value;
+            case >= GALLON:
+                CurrentUnit = UnitVolume.Gallon;
+                return ConvertTo(UnitVolume.Gallon);
+            case >= LITER:
+                CurrentUnit = UnitVolume.Liter;
+                return ConvertTo(UnitVolume.Liter);
+            case >= QUART:
+                CurrentUnit = UnitVolume.Quart;
+                return ConvertTo(UnitVolume.Quart);
+            case >= PINT:
+                CurrentUnit = UnitVolume.Pint;
+                return ConvertTo(UnitVolume.Pint);
+            case >= CUP:
+                CurrentUnit = UnitVolume.Cup;
+                return ConvertTo(UnitVolume.Cup);
+            case >= TABLESPOON:
+                CurrentUnit = UnitVolume.Tablespoon;
+                return ConvertTo(UnitVolume.Tablespoon);
+            case >= TEASPOON:
+                CurrentUnit = UnitVolume.Teaspoon;
+                return ConvertTo(UnitVolume.Teaspoon);
+            default:
+                CurrentUnit = UnitVolume.Milliliter;
+                return Value;
         }
     }
 
-    public override double ConvertToLargest()
-    {
-        return ConvertToLargest(BaseValue);
-    }
+    public override double ConvertToLargest() => ConvertToLargest(BaseValue);
 
-    public override void ConvertFrom(Enum unit)
+    public override void ConvertFrom(Enum unit) => BaseValue *= unit switch
     {
-        BaseValue *= unit switch
-        {
-            UnitVolume.Milliliter => 1,
-            UnitVolume.Teaspoon => 4.92892,
-            UnitVolume.Tablespoon => 14.7868,
-            UnitVolume.Cup => 236.588,
-            UnitVolume.Pint => 473.176,
-            UnitVolume.Quart => 946.353,
-            UnitVolume.Liter => 1000,
-            UnitVolume.Gallon => 3785.41,
-            _ => throw new ArgumentException("Invalid unit"),
-        };
-    }
+        UnitVolume.Milliliter => 1,
+        UnitVolume.Teaspoon => TEASPOON,
+        UnitVolume.Tablespoon => TABLESPOON,
+        UnitVolume.Cup => CUP,
+        UnitVolume.Pint => PINT,
+        UnitVolume.Quart => QUART,
+        UnitVolume.Liter => LITER,
+        UnitVolume.Gallon => GALLON,
+        _ => throw new ArgumentException("Invalid unit"),
+    };
 }
