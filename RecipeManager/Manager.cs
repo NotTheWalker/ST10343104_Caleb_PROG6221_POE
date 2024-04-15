@@ -16,37 +16,49 @@ public class Manager
     public void Start()
     {
         Console.WriteLine("Welcome to the Recipe Manager!");
-        Console.WriteLine("What would you like to do?");
-        Console.WriteLine("1. Add a recipe");
-        Console.WriteLine("2. View a recipe");
-        Console.WriteLine("3. Exit");
-
-        string reset1 = "Would you like to reset the recipe?";
-        string reset2 = "Please confirm that you would like to reset the recipe.";
-        string? input = Console.ReadLine();
-        switch (input)
+        do
         {
-            case "1":
-                if (IsRecipeAdded && Confirm(reset1) && Confirm(reset2))
-                {
-                    Recipe = new Recipe();
-                    IsRecipeAdded = false;
-                }
-                AddRecipe();
-                break;
-            case "2":
-                ViewRecipe();
-                break;
-            case "3":
-                Environment.Exit(0);
-                break;
-            default:
-                Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine("Invalid input. Please try again.");
-                Console.ResetColor();
-                Start();
-                break;
-        }
+            Console.WriteLine("What would you like to do?");
+            Console.WriteLine("1. Add a recipe");
+            Console.WriteLine("2. View a recipe");
+            Console.WriteLine("3. Exit");
+    
+            string reset1 = "Would you like to reset the recipe?";
+            string reset2 = "Please confirm that you would like to reset the recipe.";
+            string? input = Console.ReadLine();
+            switch (input)
+            {
+                case "1":
+                    if (IsRecipeAdded && Confirm(reset1) && Confirm(reset2))
+                    {
+                        Recipe = new Recipe();
+                        IsRecipeAdded = false;
+                    }
+                    else if (IsRecipeAdded)
+                    {
+                        Console.ForegroundColor = ConsoleColor.Red;
+                        Console.WriteLine("Recipe not reset.");
+                        Console.ResetColor();
+                    }
+                    else
+                    {
+                        AddRecipe();
+                    }
+                    break;
+                case "2":
+                    ViewRecipe();
+                    break;
+                case "3":
+                    Environment.Exit(0);
+                    break;
+                default:
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine("Invalid input. Please try again.");
+                    Console.ResetColor();
+                    Start();
+                    break;
+            }
+        } while (true);
     }
 
     public void AddRecipe()
@@ -70,24 +82,24 @@ public class Manager
                 string unitInput = Console.ReadLine()!;
                 switch (unitInput)
                 {
-                case "1":
-                    UnitVolume unitVolume = ParseVolumeUnit();
-                    Volume volume = new(amount, unitVolume);
-                    volume.ConvertFrom(unitVolume);
-                    Recipe.AddIngredient(ingredientName, volume);
-                    break;
-                case "2":
-                    UnitMass massUnit = ParseMassUnit();
-                    Mass mass = new(amount, massUnit);
-                    mass.ConvertFrom(massUnit);
-                    Recipe.AddIngredient(ingredientName, mass);
-                    break;
-                default:
-                    Console.ForegroundColor = ConsoleColor.Red;
-                    Console.WriteLine("Invalid unit. Please try again.");
-                    Console.ResetColor();
-                    i--;
-                    break;
+                    case "1":
+                        UnitVolume unitVolume = ParseVolumeUnit();
+                        Volume volume = new(amount, unitVolume);
+                        volume.ConvertFrom(unitVolume);
+                        Recipe.AddIngredient(ingredientName, volume);
+                        break;
+                    case "2":
+                        UnitMass massUnit = ParseMassUnit();
+                        Mass mass = new(amount, massUnit);
+                        mass.ConvertFrom(massUnit);
+                        Recipe.AddIngredient(ingredientName, mass);
+                        break;
+                    default:
+                        Console.ForegroundColor = ConsoleColor.Red;
+                        Console.WriteLine("Invalid unit. Please try again.");
+                        Console.ResetColor();
+                        i--;
+                        break;
                 }
             }
             catch (Exception)
@@ -133,7 +145,7 @@ public class Manager
             _ => throw new ArgumentException("Invalid scale factor"),
         });
         Recipe.PrintRecipe();
-        
+
         Console.WriteLine("Would you like to reset the scale?");
         Console.WriteLine("1. Yes");
         Console.WriteLine("2. No");
