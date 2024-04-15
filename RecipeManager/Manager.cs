@@ -6,6 +6,7 @@ namespace RecipeManager;
 public class Manager
 {
     private Recipe Recipe { get; set; }
+    private bool IsRecipeAdded { get; set; } = false;
 
     public Manager()
     {
@@ -20,14 +21,21 @@ public class Manager
         Console.WriteLine("2. View a recipe");
         Console.WriteLine("3. Exit");
 
+        string reset1 = "Would you like to reset the recipe?";
+        string reset2 = "Please confirm that you would like to reset the recipe.";
         string? input = Console.ReadLine();
         switch (input)
         {
             case "1":
+                if (IsRecipeAdded && Confirm(reset1) && Confirm(reset2))
+                {
+                    Recipe = new Recipe();
+                    IsRecipeAdded = false;
+                }
                 AddRecipe();
                 break;
             case "2":
-                // ViewRecipe(); TODO
+                ViewRecipe();
                 break;
             case "3":
                 Environment.Exit(0);
@@ -43,9 +51,6 @@ public class Manager
 
     public void AddRecipe()
     {
-        Console.WriteLine("Enter the name of the recipe:");
-        string name = Console.ReadLine()!;
-
         Console.WriteLine("Enter the number of ingredients:");
         int numIngredients = int.Parse(Console.ReadLine()!);
 
@@ -103,9 +108,57 @@ public class Manager
             Console.WriteLine($"Enter description for step {i + 1}:");
             steps[i] = Console.ReadLine()!;
         }
-        
+        Recipe.SetSteps(steps);
+
         Console.WriteLine("Recipe added successfully!");
+        IsRecipeAdded = true;
         Start();
+    }
+
+    public void ViewRecipe()
+    {
+        Console.WriteLine("Would you like to scale the recipe?");
+        Console.WriteLine("1. Half");
+        Console.WriteLine("2. Original");
+        Console.WriteLine("3. Double");
+        Console.WriteLine("4. Triple");
+
+        string? scaleInput = Console.ReadLine();
+        Recipe.SetScale(scaleInput switch
+        {
+            "1" => Recipe.ScaleFactor.Half,
+            "2" => Recipe.ScaleFactor.Original,
+            "3" => Recipe.ScaleFactor.Double,
+            "4" => Recipe.ScaleFactor.Triple,
+            _ => throw new ArgumentException("Invalid scale factor"),
+        });
+        Recipe.PrintRecipe();
+        
+        Console.WriteLine("Would you like to reset the scale?");
+        Console.WriteLine("1. Yes");
+        Console.WriteLine("2. No");
+
+        string? resetInput = Console.ReadLine();
+        if (resetInput == "1")
+        {
+            Recipe.SetScale(Recipe.ScaleFactor.Original);
+        }
+
+        Start();
+    }
+
+    private static bool Confirm(string message)
+    {
+        Console.WriteLine(message);
+        Console.WriteLine("1. Yes");
+        Console.WriteLine("2. No");
+        string? input = Console.ReadLine();
+        return input switch
+        {
+            "1" => true,
+            "2" => false,
+            _ => throw new ArgumentException("Invalid input"),
+        };
     }
 
     private static UnitVolume ParseVolumeUnit()

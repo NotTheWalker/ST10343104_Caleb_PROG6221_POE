@@ -23,6 +23,16 @@ public class Recipe
         };
     };
 
+    public void SetScale(ScaleFactor scale)
+    {
+        Scale = scale;
+    }
+
+    public void SetSteps(string[] steps)
+    {
+        Steps = steps;
+    }
+
     public Recipe(Dictionary<string, AbstractMeasurable> ingredients, string[] steps)
     {
         Ingredients = ingredients;
@@ -33,12 +43,20 @@ public class Recipe
     public Recipe()
     {
         Ingredients = new Dictionary<string, AbstractMeasurable>();
-        Steps = new string[0];
+        Steps = Array.Empty<string>();
     }
 
     public void AddIngredient(string name, AbstractMeasurable amount)
     {
         Ingredients.Add(name, amount);
+    }
+
+    public void AddStep(string step)
+    {
+        string[] resizedSteps = new string[Steps.Length + 1];
+        Array.Copy(Steps, resizedSteps, Steps.Length);
+        resizedSteps[^1] = step;
+        Steps = resizedSteps;
     }
 
     public void PrintRecipe()
@@ -48,7 +66,7 @@ public class Recipe
         {
             AbstractMeasurable scaledAmount = ingredient.Value;
             scaledAmount.SetBaseValue(scaledAmount.GetBaseValue() * GetScaleFactorValue(Scale));
-            Console.WriteLine($"{ingredient.Key}: {ingredient.Value.ConvertToLargest()} {ingredient.Value.GetCurrentUnit()}");
+            Console.WriteLine($"{ingredient.Key}: {Math.Round(ingredient.Value.ConvertToLargest(), 2)} {ingredient.Value.GetCurrentUnit()}");
         }
 
         Console.WriteLine("\nSteps:");
