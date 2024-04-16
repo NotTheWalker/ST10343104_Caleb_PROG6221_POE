@@ -1,4 +1,4 @@
-using static RecipeManager.Mass;
+﻿using static RecipeManager.Mass;
 using static RecipeManager.Volume;
 
 namespace RecipeManager;
@@ -18,7 +18,7 @@ public class Manager
         Console.WriteLine("Welcome to the Recipe Manager!");
         do
         {
-            Console.WriteLine("What would you like to do?");
+            ColourMessage("What would you like to do?", ConsoleColor.Cyan);
             Console.WriteLine("1. Add a recipe");
             Console.WriteLine("2. View a recipe");
             Console.WriteLine("3. Exit");
@@ -134,7 +134,7 @@ public class Manager
 
     public void ViewRecipe()
     {
-        Console.WriteLine("Would you like to scale the recipe?");
+        ColourMessage("\nWould you like to scale the recipe?", ConsoleColor.Cyan);
         Console.WriteLine("1. Half");
         Console.WriteLine("2. Original");
         Console.WriteLine("3. Double");
@@ -151,7 +151,7 @@ public class Manager
         });
         Recipe.PrintRecipe();
 
-        Console.WriteLine("Would you like to reset the scale?");
+        ColourMessage("\nWould you like to reset the recipe?", ConsoleColor.Cyan);
         Console.WriteLine("1. Yes");
         Console.WriteLine("2. No");
 
@@ -166,7 +166,7 @@ public class Manager
 
     private static bool Confirm(string message)
     {
-        Console.WriteLine(message);
+        ColourMessage(message, ConsoleColor.Yellow);
         Console.WriteLine("1. Yes");
         Console.WriteLine("2. No");
         string? input = Console.ReadLine();
