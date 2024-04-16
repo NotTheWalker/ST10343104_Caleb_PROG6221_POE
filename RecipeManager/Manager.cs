@@ -1,4 +1,4 @@
-﻿using static RecipeManager.Mass;
+using static RecipeManager.Mass;
 using static RecipeManager.Volume;
 
 namespace RecipeManager;
@@ -22,7 +22,7 @@ public class Manager
             Console.WriteLine("1. Add a recipe");
             Console.WriteLine("2. View a recipe");
             Console.WriteLine("3. Exit");
-
+    
             string reset1 = "Would you like to reset the recipe?";
             string reset2 = "Please confirm that you would like to reset the recipe.";
             string? input = Console.ReadLine();
@@ -54,7 +54,7 @@ public class Manager
                     }
                     else
                     {
-                        ViewRecipe();
+                    ViewRecipe();
                     }
                     break;
                 case "3":
@@ -92,10 +92,16 @@ public class Manager
                 switch (unitInput)
                 {
                     case "1":
-                        AddIngredient(ParseVolumeUnit, ingredientName, amount);
+                        UnitVolume unitVolume = ParseVolumeUnit();
+                        Volume volume = new(amount, unitVolume);
+                        volume.ConvertFrom(unitVolume);
+                        Recipe.AddIngredient(ingredientName, volume);
                         break;
                     case "2":
-                        AddIngredient(ParseMassUnit, ingredientName, amount);
+                        UnitMass massUnit = ParseMassUnit();
+                        Mass mass = new(amount, massUnit);
+                        mass.ConvertFrom(massUnit);
+                        Recipe.AddIngredient(ingredientName, mass);
                         break;
                     default:
                         ErrorMessage("Invalid input. Please try again.");
@@ -231,26 +237,4 @@ public class Manager
             _ => throw new ArgumentException("Invalid mass unit"),
         };
     }
-
-    private void AddIngredient<T>(Func<T> parseUnit, string ingredientName, double amount) where T : Enum
-    {
-        AbstractMeasurable ingredientUnit;
-
-        if (typeof(T) == typeof(UnitVolume))
-        {
-            ingredientUnit = new Volume(amount, (UnitVolume)(object)parseUnit());
-        }
-        else if (typeof(T) == typeof(UnitMass))
-        {
-            ingredientUnit = new Mass(amount, (UnitMass)(object)parseUnit());
-        }
-        else
-        {
-            throw new ArgumentException("Invalid unit type");
-        }
-
-        ingredientUnit.ConvertFrom(parseUnit());
-        Recipe.AddIngredient(ingredientName, ingredientUnit);
-    }
-
 }
