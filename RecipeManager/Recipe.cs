@@ -55,7 +55,7 @@ public class Recipe
     {
         string[] resizedSteps = new string[Steps.Length + 1];
         Array.Copy(Steps, resizedSteps, Steps.Length);
-        resizedSteps[^1] = step;
+        resizedSteps[resizedSteps.Length-1] = step;
         Steps = resizedSteps;
     }
 
