@@ -1,7 +1,18 @@
-﻿namespace RecipeManager;
+﻿///<summary>
+///Caleb Morse
+///ST10343104
+///Group 2
+///References:
+/// https://www.w3schools.com/cs/cs_method_overloading.php
+/// https://learn.microsoft.com/en-us/dotnet/csharp/fundamentals/functional/pattern-matching#compare-discrete-values
+/// https://learn.microsoft.com/en-us/dotnet/csharp/fundamentals/functional/pattern-matching#relational-patterns
+///</summary>
 
-public class Volume : AbstractMeasurable
+namespace RecipeManager;
+
+public class Volume : AbstractMeasurable // Volume is a subclass of AbstractMeasurable
 {
+    // Constants for the conversion factors
     private const double TEASPOON = 4.92892;
     private const double TABLESPOON = 14.7868;
     private const double CUP = 236.588;
@@ -10,13 +21,13 @@ public class Volume : AbstractMeasurable
     private const double LITER = 1000;
     private const double GALLON = 3785.41;
 
-    public enum UnitVolume
+    public enum UnitVolume // Enum for the units of volume
     {
         // Units arranged in ascending order for comparison purposes
         Milliliter, Teaspoon, Tablespoon, Cup, Pint, Quart, Liter, Gallon
     }
 
-    public Volume(double milliliters, UnitVolume unit)
+    public Volume(double milliliters, UnitVolume unit) // Constructor for the Volume class
     {
         BaseValue = milliliters;
         CurrentUnit = unit;

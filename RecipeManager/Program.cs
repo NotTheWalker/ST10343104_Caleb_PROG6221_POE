@@ -1,4 +1,10 @@
-﻿namespace RecipeManager;
+﻿///<summary>
+///Caleb Morse
+///ST10343104
+///Group 2
+///</summary>
+
+namespace RecipeManager;
 
 class Program
 {

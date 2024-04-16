@@ -1,147 +1,155 @@
-﻿using static RecipeManager.Mass;
+﻿///<summary>
+///Caleb Morse
+///ST10343104
+///Group 2
+///References:
+/// https://learn.microsoft.com/en-us/dotnet/csharp/nullable-references#nullable-variable-annotations
+/// https://www.c-sharpcorner.com/article/change-console-foreground-and-background-color-in-c-sharp/
+///</summary>
+
+using static RecipeManager.Mass;
 using static RecipeManager.Volume;
 
 namespace RecipeManager;
 
 public class Manager
 {
-    private Recipe Recipe { get; set; }
-    private bool IsRecipeAdded { get; set; } = false;
+    private Recipe Recipe { get; set; } // The recipe to be managed
+    private bool IsRecipeAdded { get; set; } = false; // Whether a recipe has been added
 
-    public Manager()
+    public Manager() // Constructor for the Manager class
     {
         Recipe = new Recipe();
     }
 
-    public void Start()
+    public void Start() // The main menu for the Recipe Manager, controls the flow of the program
     {
         Console.WriteLine("Welcome to the Recipe Manager!");
-        do
+        do // Loop to keep the program running
         {
+            // Main menu
             ColourMessage("What would you like to do?", ConsoleColor.Cyan);
             Console.WriteLine("1. Add a recipe");
             Console.WriteLine("2. View a recipe");
             Console.WriteLine("3. Exit");
-    
-            string reset1 = "Would you like to reset the recipe?";
-            string reset2 = "Please confirm that you would like to reset the recipe.";
+
+
+            // User input
             string? input = Console.ReadLine();
-            switch (input)
+            switch (input) // Switch statement to handle user input
             {
-                case "1":
-                    if (IsRecipeAdded && Confirm(reset1) && Confirm(reset2))
+                case "1": // Add a recipe
+                    // Confirmation messages
+                    string reset1 = "Would you like to reset the recipe?";
+                    string reset2 = "Please confirm that you would like to reset the recipe.";
+                    if (IsRecipeAdded && Confirm(reset1) && Confirm(reset2)) // If a recipe is added and the user confirms twice
                     {
-                        Recipe = new Recipe();
-                        IsRecipeAdded = false;
+                        Recipe = new Recipe(); // Reset the recipe
+                        IsRecipeAdded = false; // Set the recipe added flag to false
                     }
-                    else if (IsRecipeAdded)
+                    else if (IsRecipeAdded) // If a recipe is added and the user does not confirm twice
                     {
-                        Console.ForegroundColor = ConsoleColor.Red;
-                        Console.WriteLine("Recipe not reset.");
-                        Console.ResetColor();
+                        ErrorMessage("Recipe not reset."); // Display an error message
                     }
                     else
                     {
-                        AddRecipe();
+                        AddRecipe(); // Add a recipe
                     }
                     break;
-                case "2":
+                case "2": // View a recipe
                     if (!IsRecipeAdded)
                     {
-                        Console.ForegroundColor = ConsoleColor.Red;
-                        Console.WriteLine("No recipe added. Please add a recipe first.");
-                        Console.ResetColor();
+                        ErrorMessage("No recipe added. Please add a recipe first."); // Display an error message
                     }
                     else
                     {
-                    ViewRecipe();
+                        ViewRecipe(); // View a recipe
                     }
                     break;
-                case "3":
+                case "3": // Exit the program
                     Environment.Exit(0);
                     break;
-                default:
-                    Console.ForegroundColor = ConsoleColor.Red;
-                    Console.WriteLine("Invalid input. Please try again.");
-                    Console.ResetColor();
-                    Start();
+                default: // Invalid input
+                    ErrorMessage("Invalid input. Please try again."); // Display an error message
                     break;
             }
-        } while (true);
+            // End of main menu
+        } while (true); // Loop to keep the program running
     }
 
-    public void AddRecipe()
+    public void AddRecipe() // Method to add a recipe
     {
         Console.WriteLine("Enter the number of ingredients:");
-        int numIngredients = int.Parse(Console.ReadLine()!);
+        int numIngredients = int.Parse(Console.ReadLine()!); // Parse the number of ingredients, convert to int
 
-        for (int i = 0; i < numIngredients; i++)
+        for (int i = 0; i < numIngredients; i++) // Loop to add ingredients
         {
-            try
+            try // Try block to catch exceptions, mostly for parsing errors
             {
-                Console.WriteLine($"Enter the name of ingredient {i + 1}:");
-                string ingredientName = Console.ReadLine()!;
+                Console.WriteLine($"Enter the name of ingredient {i + 1}:"); // Prompt for ingredient name
+                string ingredientName = Console.ReadLine()!; // Read the ingredient name
 
-                Console.WriteLine($"Enter the amount of {ingredientName} (amount only):");
-                double amount = double.Parse(Console.ReadLine()!);
+                Console.WriteLine($"Enter the amount of {ingredientName} (amount only):"); // Prompt for ingredient amount
+                double amount = double.Parse(Console.ReadLine()!); // Read the ingredient amount
 
-                Console.WriteLine("Select a unit:");
+                Console.WriteLine("Select a unit:"); // Prompt for unit selection
                 Console.WriteLine("1. Volume");
                 Console.WriteLine("2. Mass");
-                string unitInput = Console.ReadLine()!;
-                switch (unitInput)
+                string unitInput = Console.ReadLine()!; // Read the unit selection
+                switch (unitInput) // Switch statement to handle unit selection
                 {
-                    case "1":
-                        UnitVolume unitVolume = ParseVolumeUnit();
-                        Volume volume = new(amount, unitVolume);
-                        volume.ConvertFrom(unitVolume);
-                        Recipe.AddIngredient(ingredientName, volume);
+                    case "1": // Volume unit
+                        UnitVolume unitVolume = ParseVolumeUnit(); // Parse the volume unit
+                        Volume volume = new(amount, unitVolume); // Create a new volume object
+                        volume.ConvertFrom(unitVolume); // Convert the volume from the selected unit
+                        Recipe.AddIngredient(ingredientName, volume); // Add the ingredient to the recipe
                         break;
                     case "2":
+                        // The same as the above case, but for mass units
                         UnitMass massUnit = ParseMassUnit();
                         Mass mass = new(amount, massUnit);
                         mass.ConvertFrom(massUnit);
                         Recipe.AddIngredient(ingredientName, mass);
                         break;
                     default:
-                        ErrorMessage("Invalid input. Please try again.");
-                        i--;
+                        ErrorMessage("Invalid input. Please try again."); // Display an error message
+                        i--; // Decrement the loop counter to try again
                         break;
                 }
             }
-            catch (Exception)
+            catch (Exception) // Catch any exceptions
             {
-                ErrorMessage("An error occurred. Please try again.");
-                i--;
+                ErrorMessage("An error occurred. Please try again."); // Display an error message
+                i--; // Decrement the loop counter to try again
             }
         }
 
-        Console.WriteLine("Enter the number of steps:");
-        int numSteps = int.Parse(Console.ReadLine()!);
+        Console.WriteLine("Enter the number of steps:"); // Prompt for the number of steps
+        int numSteps = int.Parse(Console.ReadLine()!); // Read the number of steps
 
-        string[] steps = new string[numSteps];
-        for (int i = 0; i < numSteps; i++)
+        string[] steps = new string[numSteps]; // Create an array to store the steps
+        for (int i = 0; i < numSteps; i++) // Loop to add steps
         {
-            Console.WriteLine($"Enter description for step {i + 1}:");
-            steps[i] = Console.ReadLine()!;
+            Console.WriteLine($"Enter description for step {i + 1}:"); // Prompt for step description
+            steps[i] = Console.ReadLine()!; // Read the step description
         }
-        Recipe.SetSteps(steps);
+        Recipe.SetSteps(steps); // Set the steps for the recipe
 
-        Console.WriteLine("Recipe added successfully!");
-        IsRecipeAdded = true;
-        Start();
+        Console.WriteLine("Recipe added successfully!"); // Display a success message
+        IsRecipeAdded = true; // Set the recipe added flag to true
     }
 
-    public void ViewRecipe()
+    public void ViewRecipe() // Method to view a recipe
     {
-        ColourMessage("\nWould you like to scale the recipe?", ConsoleColor.Cyan);
+        ColourMessage("\nWould you like to scale the recipe?", ConsoleColor.Cyan); // Prompt to scale the recipe
+        // Display the scale options
         Console.WriteLine("1. Half");
         Console.WriteLine("2. Original");
         Console.WriteLine("3. Double");
         Console.WriteLine("4. Triple");
 
-        string? scaleInput = Console.ReadLine();
-        Recipe.SetScale(scaleInput switch
+        string? scaleInput = Console.ReadLine(); // Read the scale input
+        Recipe.SetScale(scaleInput switch // Switch statement to handle the scale input
         {
             "1" => Recipe.ScaleFactor.Half,
             "2" => Recipe.ScaleFactor.Original,
@@ -149,28 +157,21 @@ public class Manager
             "4" => Recipe.ScaleFactor.Triple,
             _ => throw new ArgumentException("Invalid scale factor"),
         });
-        Recipe.PrintRecipe();
+        Recipe.PrintRecipe(); // Print the recipe
 
-        ColourMessage("\nWould you like to reset the recipe?", ConsoleColor.Cyan);
-        Console.WriteLine("1. Yes");
-        Console.WriteLine("2. No");
-
-        string? resetInput = Console.ReadLine();
-        if (resetInput == "1")
+        if (Confirm("Would you like to reset the scale?")) // If the user confirms to reset the scale 
         {
-            Recipe.SetScale(Recipe.ScaleFactor.Original);
+            Recipe.SetScale(Recipe.ScaleFactor.Original); // Reset the scale to the original
         }
-
-        Start();
     }
 
-    private static bool Confirm(string message)
+    private static bool Confirm(string message) // Method to confirm an action
     {
-        ColourMessage(message, ConsoleColor.Yellow);
-        Console.WriteLine("1. Yes");
+        ColourMessage(message, ConsoleColor.Yellow); // Display the confirmation message
+        Console.WriteLine("1. Yes"); 
         Console.WriteLine("2. No");
-        string? input = Console.ReadLine();
-        return input switch
+        string? input = Console.ReadLine(); // Read the confirmation input
+        return input switch // Return a boolean based on the input
         {
             "1" => true,
             "2" => false,
@@ -178,21 +179,22 @@ public class Manager
         };
     }
 
-    private static void ErrorMessage(string message)
+    private static void ErrorMessage(string message) // Method to display an error message
     {
-        ColourMessage(message, ConsoleColor.Red);
+        ColourMessage(message, ConsoleColor.Red); // Display the error message
     }
 
-    private static void ColourMessage(string message, ConsoleColor color)
+    private static void ColourMessage(string message, ConsoleColor color) // Method to display a message with a specified color
     {
-        Console.ForegroundColor = color;
-        Console.WriteLine(message);
-        Console.ResetColor();
+        Console.ForegroundColor = color; // Set the console foreground color
+        Console.WriteLine(message); // Display the message
+        Console.ResetColor(); // Reset the console color
     }
 
-    private static UnitVolume ParseVolumeUnit()
+    private static UnitVolume ParseVolumeUnit() // Method to parse a volume unit
     {
-        Console.WriteLine("Select a volume unit:");
+        Console.WriteLine("Select a volume unit:"); // Prompt for volume unit selection
+        // Display the volume unit options
         Console.WriteLine("1. Milliliter");
         Console.WriteLine("2. Teaspoon");
         Console.WriteLine("3. Tablespoon");
@@ -202,8 +204,8 @@ public class Manager
         Console.WriteLine("7. Liter");
         Console.WriteLine("8. Gallon");
 
-        string? volumeUnitInput = Console.ReadLine();
-        return volumeUnitInput switch
+        string? volumeUnitInput = Console.ReadLine(); // Read the volume unit input
+        return volumeUnitInput switch // Return the volume unit based on the input
         {
             "1" => UnitVolume.Milliliter,
             "2" => UnitVolume.Teaspoon,
@@ -217,7 +219,7 @@ public class Manager
         };
     }
 
-    private static UnitMass ParseMassUnit()
+    private static UnitMass ParseMassUnit() // Same as the above method, but for mass units
     {
         Console.WriteLine("Select a mass unit:");
         Console.WriteLine("1. Milligram");
