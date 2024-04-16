@@ -1,4 +1,4 @@
-﻿using static RecipeManager.Mass;
+using static RecipeManager.Mass;
 using static RecipeManager.Volume;
 
 namespace RecipeManager;
@@ -46,7 +46,16 @@ public class Manager
                     }
                     break;
                 case "2":
+                    if (!IsRecipeAdded)
+                    {
+                        Console.ForegroundColor = ConsoleColor.Red;
+                        Console.WriteLine("No recipe added. Please add a recipe first.");
+                        Console.ResetColor();
+                    }
+                    else
+                    {
                     ViewRecipe();
+                    }
                     break;
                 case "3":
                     Environment.Exit(0);
@@ -95,18 +104,14 @@ public class Manager
                         Recipe.AddIngredient(ingredientName, mass);
                         break;
                     default:
-                        Console.ForegroundColor = ConsoleColor.Red;
-                        Console.WriteLine("Invalid unit. Please try again.");
-                        Console.ResetColor();
+                        ErrorMessage("Invalid input. Please try again.");
                         i--;
                         break;
                 }
             }
             catch (Exception)
             {
-                Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine("An error occurred. Please try again.");
-                Console.ResetColor();
+                ErrorMessage("An error occurred. Please try again.");
                 i--;
             }
         }
@@ -171,6 +176,18 @@ public class Manager
             "2" => false,
             _ => throw new ArgumentException("Invalid input"),
         };
+    }
+
+    private static void ErrorMessage(string message)
+    {
+        ColourMessage(message, ConsoleColor.Red);
+    }
+
+    private static void ColourMessage(string message, ConsoleColor color)
+    {
+        Console.ForegroundColor = color;
+        Console.WriteLine(message);
+        Console.ResetColor();
     }
 
     private static UnitVolume ParseVolumeUnit()
