@@ -1,11 +1,17 @@
-﻿namespace RecipeManager;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-class Program
+namespace RecipeManager
 {
-    static void Main(string[] args)
+    class Program
     {
-        Manager manager = new();
-        manager.Start();
+        static void Main(string[] args)
+        {
+            Manager manager = new();
+            manager.Start();
+        }
     }
 }
-
